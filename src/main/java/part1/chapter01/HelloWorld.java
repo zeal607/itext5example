@@ -53,6 +53,7 @@ public class HelloWorld {
         document.open();
         // step 4
         document.add(new Paragraph("Hello World!"));
+        document.add(new Paragraph("Hello World!"));
         // step 5
         document.close();
     }

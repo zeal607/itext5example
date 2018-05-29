@@ -22,25 +22,32 @@ import java.sql.SQLException;
  * Writes a list of directors to a PDF file.
  */
 public class DirectorPhrases2 extends DirectorPhrases1 {
-    
-    /** The resulting PDF file. */
+
+    /**
+     * The resulting PDF file.
+     */
     public static final String RESULT = "results/part1/chapter02/director_phrases_2.pdf";
 
-    /** A font that will be used in our PDF. */
+    /**
+     * A font that will be used in our PDF.
+     */
     public static final Font BOLD;
-    /** A font that will be used in our PDF. */
+    /**
+     * A font that will be used in our PDF.
+     */
     public static final Font NORMAL;
-    
+
     static {
         BaseFont timesbd = null;
         BaseFont times = null;
         try {
             // create a font that will be embedded
             timesbd = BaseFont.createFont(
-                "c:/windows/fonts/timesbd.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
+//                    "c:/windows/fonts/timesbd.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
+                    "c:/windows/fonts/STKAITI.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             // create a font that will be embedded
             times = BaseFont.createFont(
-                "c:/windows/fonts/times.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
+                    "c:/windows/fonts/times.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
         } catch (DocumentException e) {
             e.printStackTrace();
             System.exit(1);
@@ -48,38 +55,39 @@ public class DirectorPhrases2 extends DirectorPhrases1 {
             e.printStackTrace();
             System.exit(1);
         }
-        BOLD = new Font(timesbd, 12);
+        BOLD = new Font(timesbd, 19);
         NORMAL = new Font(times, 12);
     }
-    
+
     /**
      * Creates a Phrase with the name and given name of a director using different fonts.
-     * @param    rs    the ResultSet containing director records.
+     *
+     * @param rs the ResultSet containing director records.
      */
     public Phrase createDirectorPhrase(ResultSet rs)
-        throws UnsupportedEncodingException, SQLException {
+            throws UnsupportedEncodingException, SQLException {
         Phrase director = new Phrase();
-        Chunk name = new Chunk(new String(rs.getBytes("name"), "UTF-8"), BOLD);
+        Chunk name = new Chunk(new String(rs.getString("name").getBytes(), "UTF-8"), BOLD);
         name.setUnderline(0.2f, -2f);
         director.add(name);
-        director.add(new Chunk(",", BOLD));
+        director.add(new Chunk(",12 中文12 ", BOLD));
         director.add(new Chunk(" ", NORMAL));
         director.add(
-            new Chunk(new String(rs.getBytes("given_name"), "UTF-8"), NORMAL));
+                new Chunk(new String(rs.getString("given_name").getBytes(), "UTF-8"), NORMAL));
         director.setLeading(24);
         return director;
     }
-    
+
     /**
      * Main method.
      *
-     * @param    args    no arguments needed
-     * @throws DocumentException 
-     * @throws IOException 
+     * @param args no arguments needed
+     * @throws DocumentException
+     * @throws IOException
      * @throws SQLException
      */
     public static void main(String[] args)
-        throws IOException, DocumentException, SQLException {
+            throws IOException, DocumentException, SQLException {
         new DirectorPhrases2().createPdf(RESULT);
     }
 }
